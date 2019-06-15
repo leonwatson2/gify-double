@@ -1,28 +1,41 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
+import React, { useState } from 'react';
+import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
+import TextField from '@material-ui/core/TextField';
 import './App.css';
 
-class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
+import GifContainer from './components/GifContainer';
+import { useSearchInputFetch } from './hooks/useSearchInputFetch';
+import AppTheme from './AppTheme';
+
+function App() {
+  const [gifs, setGifs] = useState([]);
+  const [query, setQuery] = useState('bears');
+  const [searchRef] = useSearchInputFetch(setGifs);
+
+  const onSearchChange = ({ target }) => {
+    setQuery(target.value);
+  };
+  return (
+    <MuiThemeProvider theme={AppTheme}>
+      <div className='App'>
+        <header className='App-header'>
+          <TextField
+            id='gif-search'
+            label='Search a Gif'
+            ref={searchRef}
+            value={query}
+            onChange={onSearchChange}
+            margin='normal'
+          />
         </header>
+        <div className='gif-list'>
+          {gifs.map(gif => {
+            return <GifContainer key={gif.id} gif={gif} />;
+          })}
+        </div>
       </div>
-    );
-  }
+    </MuiThemeProvider>
+  );
 }
 
 export default App;
