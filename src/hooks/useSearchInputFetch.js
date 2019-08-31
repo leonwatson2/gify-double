@@ -14,13 +14,16 @@ export function useSearchInputFetch(setFunction) {
         })
       )
       .pipe(debounceTime(1000));
-    searchChangeE.subscribe(value => {
+    const sub = searchChangeE.subscribe(value => {
       const q = encodeURIComponent(value);
       fetchGifs(q).then(res => {
         setFunction(res.data);
       });
     });
-  }, [searchRef.current]);
+    return () => {
+      sub.unsubscribe();
+    };
+  }, [setFunction]);
   return [searchRef];
 }
 

@@ -10,7 +10,11 @@ const LazyImage = ({ src, alt }) => {
     preImage.onload = () => {
       setImage(src);
     };
+    return () => {
+      preImage.onload = () => {};
+    };
   }, [src]);
+
   if (!GifImage)
     return <ClimbingBoxLoader size={15} sizeUnit={'px'} color={'white'} />;
 
